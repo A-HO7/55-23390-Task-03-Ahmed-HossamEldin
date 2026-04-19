@@ -1,10 +1,10 @@
 # TODO: Replace with your full name. Format: FirstName_LastName_Local
 # Example: Mohamed_Ayman_Local
-USER_NAME: FirstName_LastName_Local
+USER_NAME: Ahmed_HossamEldin_Local
 
 # TODO: Replace with your student ID. Format: XX_XXXXX
 # Example: 55_8078
-ID: XX_XXXXX
+ID: 55_23390
 
 spring:
   datasource:

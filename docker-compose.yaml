@@ -16,25 +16,25 @@ services:
   #       and replace the placeholder values with your personal info.
   #       See the Configuration section of the Task 3 spec for full instructions.
   #
-  # app:
-  #   build: .
-  #   # TODO: Replace XX-XXXXX with your student ID using a hyphen.
-  #   # Example: 55-8078_container
-  #   container_name: XX-XXXXX_container
-  #   ports:
-  #     # TODO: Replace XXXXX with the second part of your student ID (the 5 digits after the underscore).
-  #     # Example: "8078:8080"
-  #     - "XXXXX:8080"
-  #   environment:
-  #     # TODO: Replace with your full name, prefixed with Compose_. Format: Compose_FirstName_LastName
-  #     # Example: Compose_Mohamed_Ayman
-  #     USER_NAME: Compose_FirstName_LastName
-  #     # TODO: Replace with your student ID, prefixed with Compose_. Format: Compose_XX_XXXXX
-  #     # Example: Compose_55_8078
-  #     ID: Compose_XX_XXXXX
-  #     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task03db
-  #   depends_on:
-  #     - postgres
+  app:
+    build: .
+    # TODO: Replace XX-XXXXX with your student ID using a hyphen.
+    # Example: 55-8078_container
+    container_name: 55-23390_container
+    ports:
+      # TODO: Replace XXXXX with the second part of your student ID (the 5 digits after the underscore).
+      # Example: "8078:8080"
+      - "23390:8080"
+    environment:
+      # TODO: Replace with your full name, prefixed with Compose_. Format: Compose_FirstName_LastName
+      # Example: Compose_Mohamed_Ayman
+      USER_NAME: Compose_Ahmed_HossamEldin
+      # TODO: Replace with your student ID, prefixed with Compose_. Format: Compose_XX_XXXXX
+      # Example: Compose_55_8078
+      ID: Compose_55_23390
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task03db
+    depends_on:
+      - postgres
 
 volumes:
   pgdata:
