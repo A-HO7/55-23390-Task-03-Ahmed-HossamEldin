@@ -26,6 +26,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf(org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 // ── Pre-built — DO NOT REMOVE ─────────────────────────────────
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(
@@ -34,9 +36,9 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/api/seed").permitAll()
                         // ── End pre-built ─────────────────────────────────────
-                        // TODO: See Task 3 spec — Spring Security Configuration.
-                        .anyRequest().permitAll())
-                // TODO: See Task 3 spec — Spring Security Configuration.
+                        .requestMatchers("/api/auth/**", "/api/health").permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

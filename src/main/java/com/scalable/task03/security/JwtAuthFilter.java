@@ -26,11 +26,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        // TODO: See Task 3 spec — JwtAuthFilter.
-        // The chain.doFilter(...) call at the end of this method MUST stay outside the try block.
+        final String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         try {
-            // TODO
+            final String token = authHeader.substring(7);
+            final String username = jwtService.extractUsername(token);
+
+            if (username != null && org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (jwtService.isTokenValid(token)) {
+                    org.springframework.security.core.userdetails.UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    
+                    org.springframework.security.authentication.UsernamePasswordAuthenticationToken authToken = 
+                            new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                                    userDetails, null, userDetails.getAuthorities());
+                    
+                    authToken.setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource().buildDetails(request));
+                    
+                    org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
         } catch (Exception e) {
             // Token invalid — continue without authentication; Spring Security will return 401.
         }
