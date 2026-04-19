@@ -1,5 +1,6 @@
 package com.scalable.task03.service;
 
+import java.util.Date;
 import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,10 @@ import com.scalable.task03.config.JwtConfig;
 import com.scalable.task03.model.User;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
@@ -18,25 +23,39 @@ public class JwtService {
         this.jwtConfig = jwtConfig;
     }
 
-    // TODO: See Task 3 spec — JwtService.
-
-    String generateToken(User user) {
-        return null;
+    public String generateToken(User user) {
+        return Jwts.builder()
+                .subject(user.getEmail())
+                .claim("role", user.getRole().name())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration()))
+                .signWith(getSigningKey())
+                .compact();
     }
 
-    String extractUsername(String token) {
-        return null;
+    public String extractUsername(String token) {
+        return extractClaims(token).getSubject();
     }
 
-    boolean isTokenValid(String token) {
-        return false;
+    public boolean isTokenValid(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
-    Claims extractClaims(String token) {
-        return null;
+    private Claims extractClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
-    SecretKey getSigningKey() {
-        return null;
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecret());
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

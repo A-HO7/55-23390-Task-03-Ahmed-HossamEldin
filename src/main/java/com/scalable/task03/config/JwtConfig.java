@@ -1,17 +1,22 @@
 package com.scalable.task03.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtConfig {
 
-    // TODO: See Task 3 spec — JwtConfig.
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.expiration}")
+    private long expiration;
 
     public String getSecret() {
-        return null;
+        return secret;
     }
 
     public long getExpiration() {
-        return 0L;
+        return expiration;
     }
 }
